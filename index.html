@@ -17,6 +17,14 @@
     --green:#1e8e4e;
     --green-bg:#e9f7ef;
   }
+
+    @font-face {
+    font-family: 'Qhytsdakx';
+    src: url('qhyts___.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
   *{box-sizing:border-box;margin:0;padding:0}
   body{
     font-family:'Mulish','Segoe UI',system-ui,-apple-system,sans-serif;
@@ -29,7 +37,10 @@
   /* header */
   header{border-bottom:1px solid var(--line);padding:16px 0}
   header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .brand{font-weight:800;letter-spacing:.5px;font-size:18px}
+
+  .brand{font-weight:800;letter-spacing:.5px;font-size:18px;font-family:'Qhytsdakx',sans-serif}
+
+  /* .brand{font-weight:800;letter-spacing:.5px;font-size:18px} */
   .brand span{color:var(--red)}
   .lang-toggle{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden}
   .lang-toggle button{

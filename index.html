@@ -51,7 +51,7 @@
 
   h1{font-size:24px;font-weight:800;margin-bottom:4px}
   .subtitle{color:var(--label)}
-  h2{color:var(--red);font-size:17px;font-weight:800;margin-bottom:14px}
+  h2{color:var(--magenta);font-size:17px;font-weight:800;margin-bottom:14px}
   .note{color:var(--label);font-size:14px}
   .note b{color:var(--ink)}
 
@@ -77,13 +77,13 @@
   }
   .gate.locked{opacity:.55}
   .gate input{margin-top:3px;width:17px;height:17px;flex:none}
-  .gate .lockmsg{font-size:12.5px;color:var(--red);font-weight:700;margin-top:4px}
+  .gate .lockmsg{font-size:12.5px;color:var(--magenta);font-weight:700;margin-top:4px}
 
   /* form grid */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px}
   @media(max-width:700px){.grid{grid-template-columns:1fr}}
   .field label{display:block;color:var(--label);font-weight:600;margin-bottom:5px;font-size:14px}
-  .field label .req{color:var(--red)}
+  .field label .req{color:var(--magenta)}
   .field input[type=text],.field input[type=tel],.field input[type=date],.field select,.field textarea{
     width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;
     font:inherit;color:var(--ink);background:#fff;
@@ -93,11 +93,11 @@
   }
   .field.full{grid-column:1 / -1}
   .guardian-box{
-    grid-column:1 / -1;border:1px dashed var(--red);border-radius:8px;padding:14px;
+    grid-column:1 / -1;border:1px dashed var(--magenta);border-radius:8px;padding:14px;
     background:#fff;display:none;
   }
   .guardian-box.show{display:block}
-  .guardian-box h3{color:var(--red);font-size:14.5px;margin-bottom:10px}
+  .guardian-box h3{color:var(--magenta);font-size:14.5px;margin-bottom:10px}
 
   /* checkboxes & radios */
   .checkrow{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
@@ -353,7 +353,7 @@ en: {
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
 fr: {
-  title: "Formulaire de consentement et de décharge du participant",
+  title: "Formulaire de consentement et de décharge",
   subtitle: EVENT,
   intro: "Remplissez ce formulaire en ligne — aucune impression requise. À la fin, un PDF signé se télécharge sur votre appareil. Téléversez ce PDF sur la page d'inscription pour compléter votre inscription.",
   s_docs: "Étape 1 — Lire les documents de l'événement",

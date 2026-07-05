@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <style>
   :root{
-    --magenta:#C81E5B;
+    --red:#C81E5B;
     --red:#E30613;
     --purple:#7B2D8B;
     --ink:#3a3a3a;
@@ -47,11 +47,11 @@
     border:0;background:#fff;padding:6px 16px;font:inherit;font-weight:700;
     color:var(--label);cursor:pointer;
   }
-  .lang-toggle button.on{background:linear-gradient(90deg,var(--red),var(--purple));color:#fff}
+  .lang-toggle button.on{background:linear-gradient(90deg,var(--red),var(--red));color:#fff}
 
   h1{font-size:24px;font-weight:800;margin-bottom:4px}
   .subtitle{color:var(--label)}
-  h2{color:var(--magenta);font-size:17px;font-weight:800;margin-bottom:14px}
+  h2{color:var(--red);font-size:17px;font-weight:800;margin-bottom:14px}
   .note{color:var(--label);font-size:14px}
   .note b{color:var(--ink)}
 
@@ -77,13 +77,13 @@
   }
   .gate.locked{opacity:.55}
   .gate input{margin-top:3px;width:17px;height:17px;flex:none}
-  .gate .lockmsg{font-size:12.5px;color:var(--magenta);font-weight:700;margin-top:4px}
+  .gate .lockmsg{font-size:12.5px;color:var(--red);font-weight:700;margin-top:4px}
 
   /* form grid */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px}
   @media(max-width:700px){.grid{grid-template-columns:1fr}}
   .field label{display:block;color:var(--label);font-weight:600;margin-bottom:5px;font-size:14px}
-  .field label .req{color:var(--magenta)}
+  .field label .req{color:var(--red)}
   .field input[type=text],.field input[type=tel],.field input[type=date],.field select,.field textarea{
     width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;
     font:inherit;color:var(--ink);background:#fff;
@@ -93,11 +93,11 @@
   }
   .field.full{grid-column:1 / -1}
   .guardian-box{
-    grid-column:1 / -1;border:1px dashed var(--magenta);border-radius:8px;padding:14px;
+    grid-column:1 / -1;border:1px dashed var(--red);border-radius:8px;padding:14px;
     background:#fff;display:none;
   }
   .guardian-box.show{display:block}
-  .guardian-box h3{color:var(--magenta);font-size:14.5px;margin-bottom:10px}
+  .guardian-box h3{color:var(--red);font-size:14.5px;margin-bottom:10px}
 
   /* checkboxes & radios */
   .checkrow{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
@@ -127,10 +127,10 @@
   /* actions */
   .btn-main{
     border:0;border-radius:6px;padding:13px 26px;font:inherit;font-weight:800;font-size:15px;
-    color:#fff;background:linear-gradient(90deg,var(--red),var(--purple));cursor:pointer;
+    color:#fff;background:linear-gradient(90deg,var(--red),var(--red));cursor:pointer;
   }
   .btn-main:disabled{opacity:.5;cursor:not-allowed}
-  .errors{color:var(--magenta);font-weight:700;font-size:14px;margin-top:10px;white-space:pre-line}
+  .errors{color:var(--red);font-weight:700;font-size:14px;margin-top:10px;white-space:pre-line}
   .success{color:var(--green);font-weight:700;font-size:14px;margin-top:10px}
   .steps{color:var(--label);font-size:13.5px;margin-top:14px}
   footer{padding:20px 0;color:var(--label);font-size:12.5px;border-top:1px solid var(--line);margin-top:10px}

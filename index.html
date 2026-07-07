@@ -583,7 +583,7 @@ async function generatePDF(d){
   function checkline(t){ text("[X]  " + t, { size: 9.5, after: 3 }); }
 
   // Header
-  page.drawText("ZONE01 ROBOTICS", { x: M, y, size: 25, font: brand, color: rgb(0.78,0.06,0.18) });
+  page.drawText("Robot ZONE01", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
   y -= 18;
   text(T.title, { size: 15, bold: true, color: navy });
   text(EVENT, { size: 9.5, color: grey, after: 2 });

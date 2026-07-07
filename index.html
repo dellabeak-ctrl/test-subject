@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Consent &amp; Release — Zone01 Robotics</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 <style>
   :root{
     --red:#C81E5B;
@@ -543,6 +544,9 @@ async function generatePDF(d){
   const { PDFDocument, StandardFonts, rgb } = PDFLib;
   const T = L[lang];
   const pdf = await PDFDocument.create();
+  pdf.registerFontkit(fontkit);
+  const brandBytes = await fetch("qhyts___.ttf").then(r => r.arrayBuffer());
+  const brand = await pdf.embedFont(brandBytes);
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const navy = rgb(0.10, 0.18, 0.35), grey = rgb(0.4, 0.4, 0.4), black = rgb(0.1,0.1,0.1);
@@ -579,7 +583,7 @@ async function generatePDF(d){
   function checkline(t){ text("[X]  " + t, { size: 9.5, after: 3 }); }
 
   // Header
-  page.drawText("ZONE01 ROBOTICS", { x: M, y, size: 10, font: bold, color: rgb(0.78,0.06,0.18) });
+  page.drawText("ZONE01 ROBOTICS", { x: M, y, size: 25, font: brand, color: rgb(0.78,0.06,0.18) });
   y -= 18;
   text(T.title, { size: 15, bold: true, color: navy });
   text(EVENT, { size: 9.5, color: grey, after: 2 });

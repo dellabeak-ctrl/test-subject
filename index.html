@@ -216,6 +216,7 @@
       <div class="field"><label data-i18n="f_econtact"></label><input type="text" id="econtact"></div>
       <div class="field"><label data-i18n="f_ephone"></label><input type="tel" id="ephone"></div>
       <div class="field"><label data-i18n="f_medical"></label><input type="text" id="medical"></div>
+      <div class="field"><label data-i18n="f_additional"></label><input type="text" id="additional"></div>
       <div class="guardian-box" id="guardian-box">
         <h3 data-i18n="g_title"></h3>
         <div class="grid">
@@ -320,6 +321,7 @@ en: {
   f_gender: "Gender *", f_bday: "Date of birth *",
   f_school: "School or club", f_econtact: "Emergency contact — name *",
   f_ephone: "Emergency contact — phone *", f_medical: "Allergies or medical notes",
+  f_additional: "Any additional information",
   opt_select: "--- Select ---", opt_participant: "Participant", opt_coach: "Coach",
   opt_staff: "Staff / Volunteer", opt_f: "Female", opt_m: "Male", opt_x: "Other",
   opt_na: "Prefer not to say",
@@ -372,6 +374,7 @@ fr: {
   f_gender: "Genre *", f_bday: "Date de naissance *", 
   f_school: "École ou club", f_econtact: "Contact d'urgence — nom *",
   f_ephone: "Contact d'urgence — téléphone *", f_medical: "Allergies ou notes médicales",
+  f_additional: "Toute information supplémentaire",
   opt_select: "--- Sélectionner ---", opt_participant: "Participant(e)", opt_coach: "Entraîneur(e)",
   opt_staff: "Personnel / Bénévole", opt_f: "Féminin", opt_m: "Masculin", opt_x: "Autre",
   opt_na: "Préfère ne pas répondre",
@@ -514,6 +517,7 @@ function collect(){
     ptype: val("ptype"), gender: val("gender"), birthday: val("birthday"),
     school: val("school"),
     econtact: val("econtact"), ephone: val("ephone"), medical: val("medical"),
+    additional: val("additional"),
     minor: isMinor(), gname: val("gname"), grel: val("grel"),
     media: (document.querySelector("input[name=media]:checked") || {}).value || "",
     ackDocs: document.getElementById("ack-docs").checked,
@@ -599,6 +603,7 @@ async function generatePDF(d){
   kv(T.f_econtact.replace(" *",""), d.econtact);
   kv(T.f_ephone.replace(" *",""), d.ephone);
   kv(T.f_medical, d.medical);
+  kv(T.f_additional, d.additional);
   if (d.minor){ kv(T.g_name.replace(" *",""), d.gname); kv(T.g_rel.replace(" *",""), d.grel); }
 
   heading(T.s_ack.replace(/^.*?— /, ""));

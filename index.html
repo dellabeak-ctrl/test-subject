@@ -646,7 +646,7 @@ async function generatePDF(d){
   const blob = new Blob([bytes], { type: "application/pdf" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = ("consent_" + d.lastname + "_" + d.firstname).replace(/\s+/g, "_") + ".pdf";
+  a.download = (d.school + "_" + d.lastname + "_" + d.firstname).replace(/\s+/g, "_") + ".pdf";
   a.click();
   URL.revokeObjectURL(a.href);
 }

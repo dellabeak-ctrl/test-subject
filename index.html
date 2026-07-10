@@ -212,7 +212,6 @@
         </select>
       </div>
       <div class="field"><label data-i18n="f_bday"></label><input type="date" id="birthday"></div>
-      <div class="field"><label data-i18n="f_team"></label><input type="text" id="team"></div>
       <div class="field"><label data-i18n="f_school"></label><input type="text" id="school"></div>
       <div class="field"><label data-i18n="f_econtact"></label><input type="text" id="econtact"></div>
       <div class="field"><label data-i18n="f_ephone"></label><input type="tel" id="ephone"></div>
@@ -318,7 +317,7 @@ en: {
   lockmsg: "Open all three documents above to unlock this checkbox.",
   s_info: "Step 2 — Participant information",
   f_first: "First name *", f_last: "Last name *", f_type: "Person type *",
-  f_gender: "Gender *", f_bday: "Date of birth *", f_team: "Team name",
+  f_gender: "Gender *", f_bday: "Date of birth *",
   f_school: "School or club", f_econtact: "Emergency contact — name *",
   f_ephone: "Emergency contact — phone *", f_medical: "Allergies or medical notes",
   opt_select: "--- Select ---", opt_participant: "Participant", opt_coach: "Coach",
@@ -329,7 +328,7 @@ en: {
   s_ack: "Step 3 — Acknowledgements",
   ack_staff: "I agree to follow all instructions given by event staff and volunteers.",
   ack_nonlego: "I understand that some challenges include elements that are not made of LEGO, and I agree to handle them only as directed by the rules and by staff.",
-  s_media: "Media consent (optional)",
+  s_media: "Media consent",
   media_text: "May Zone01 Robotics take and use photos and video of the participant for promotional and educational purposes?",
   yes: "Yes", no: "No",
   s_release: "Step 4 — Assumption of risk and release of liability",
@@ -341,7 +340,7 @@ en: {
   sig_hint: "Draw with your mouse or finger.",
   clear: "Clear",
   generate: "Generate my signed PDF",
-  next_steps: "Next step: upload the downloaded PDF in the \u201cConsent & Release Form\u201d field on the registration page.",
+  next_steps: "Next step: Send the filled PDF back to the teacher or instructor that shared the form link with you.",
   footer: "Nothing you enter on this page is sent or stored anywhere — the PDF is created entirely on your device. Questions? Contact us at info@zone01.ca.",
   err_docs: "Open all three documents and check the acknowledgement box.",
   err_required: "Fill in all required fields marked with *.",
@@ -350,7 +349,7 @@ en: {
   err_sig_p: "Draw the participant signature.",
   err_sig_g: "Draw the parent/guardian signature.",
   err_release: "Confirm the release of liability checkbox.",
-  success: "Done! Your signed PDF has downloaded. Upload it on the registration page.",
+  success: "Done! Your signed PDF has downloaded. Send it back to the email that shared the form link with you.",
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
 fr: {
@@ -370,7 +369,7 @@ fr: {
   lockmsg: "Ouvrez les trois documents ci-dessus pour déverrouiller cette case.",
   s_info: "Étape 2 — Renseignements sur le participant",
   f_first: "Prénom *", f_last: "Nom de famille *", f_type: "Type de personne *",
-  f_gender: "Genre *", f_bday: "Date de naissance *", f_team: "Nom de l'équipe",
+  f_gender: "Genre *", f_bday: "Date de naissance *", 
   f_school: "École ou club", f_econtact: "Contact d'urgence — nom *",
   f_ephone: "Contact d'urgence — téléphone *", f_medical: "Allergies ou notes médicales",
   opt_select: "--- Sélectionner ---", opt_participant: "Participant(e)", opt_coach: "Entraîneur(e)",
@@ -381,7 +380,7 @@ fr: {
   s_ack: "Étape 3 — Reconnaissances",
   ack_staff: "Je m'engage à suivre toutes les consignes du personnel et des bénévoles de l'événement.",
   ack_nonlego: "Je comprends que certains défis comportent des éléments qui ne sont pas en LEGO et je m'engage à les manipuler uniquement selon les règles et les directives du personnel.",
-  s_media: "Consentement médias (facultatif)",
+  s_media: "Consentement médias",
   media_text: "Zone01 Robotics peut-il prendre et utiliser des photos et vidéos du participant à des fins promotionnelles et éducatives ?",
   yes: "Oui", no: "Non",
   s_release: "Étape 4 — Acceptation des risques et décharge de responsabilité",
@@ -393,7 +392,7 @@ fr: {
   sig_hint: "Dessinez avec la souris ou le doigt.",
   clear: "Effacer",
   generate: "Générer mon PDF signé",
-  next_steps: "Prochaine étape : téléversez le PDF téléchargé dans le champ « Consent & Release Form » de la page d'inscription.",
+  next_steps: "Prochaine étape : Veuillez renvoyer le formulaire PDF rempli à l'enseignant ou au formateur qui vous a communiqué le lien.",
   footer: "Rien de ce que vous saisissez sur cette page n'est envoyé ni stocké — le PDF est créé entièrement sur votre appareil. Des questions ? Écrivez-nous à info@zone01.ca.",
   err_docs: "Ouvrez les trois documents et cochez la case de reconnaissance.",
   err_required: "Remplissez tous les champs obligatoires marqués d'un *.",
@@ -402,7 +401,7 @@ fr: {
   err_sig_p: "Dessinez la signature du participant.",
   err_sig_g: "Dessinez la signature du parent/tuteur.",
   err_release: "Confirmez la case de décharge de responsabilité.",
-  success: "Terminé ! Votre PDF signé a été téléchargé. Téléversez-le sur la page d'inscription.",
+  success: "Terminé ! Votre PDF signé a été téléchargé. Renvoyez-le à l'adresse électronique qui vous a transmis le lien du formulaire.",
   pdf_generated: "Généré en ligne le", pdf_media_yes: "OUI", pdf_media_no: "NON",
 }};
 
@@ -513,7 +512,7 @@ function collect(){
   return {
     firstname: val("firstname"), lastname: val("lastname"),
     ptype: val("ptype"), gender: val("gender"), birthday: val("birthday"),
-    team: val("team"), school: val("school"),
+    school: val("school"),
     econtact: val("econtact"), ephone: val("ephone"), medical: val("medical"),
     minor: isMinor(), gname: val("gname"), grel: val("grel"),
     media: (document.querySelector("input[name=media]:checked") || {}).value || "",
@@ -596,7 +595,6 @@ async function generatePDF(d){
   kv(T.f_type.replace(" *",""), T["opt_" + d.ptype] || d.ptype);
   kv(T.f_gender.replace(" *",""), {F:T.opt_f, M:T.opt_m, X:T.opt_x, "-":T.opt_na}[d.gender] || d.gender);
   kv(T.f_bday.replace(" *",""), d.birthday);
-  kv(T.f_team, d.team);
   kv(T.f_school, d.school);
   kv(T.f_econtact.replace(" *",""), d.econtact);
   kv(T.f_ephone.replace(" *",""), d.ephone);

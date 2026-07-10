@@ -72,6 +72,13 @@
   .doc a{color:var(--purple);font-weight:700;text-decoration:underline}
   .doc p{font-size:13px;color:var(--label)}
 
+  .media-notice{
+  display:none;margin-top:10px;padding:12px 14px;
+  background:#fff;border-left:4px solid var(--magenta);
+  border-radius:6px;font-size:13.5px;color:var(--ink);
+  }
+  .media-notice.show{display:block}
+
   .gate{
     display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);
     border-radius:8px;padding:14px;margin-top:6px;
@@ -105,6 +112,8 @@
   .checkrow input{margin-top:3px;width:17px;height:17px;flex:none}
   .radios{display:flex;gap:26px;margin-top:6px}
   .radios label{display:flex;gap:8px;align-items:center;font-weight:600;color:var(--ink)}
+
+  <div class="media-notice" id="media-notice" data-i18n="media_no_notice"></div>
 
   /* release text */
   .release{
@@ -333,6 +342,7 @@ en: {
   s_media: "Media consent",
   media_text: "May Zone01 Robotics take and use photos and video of the participant for promotional and educational purposes?",
   yes: "Yes", no: "No",
+  media_no_notice: "Your choice is respected. Please note that photos are taken throughout the event, and we cannot guarantee that you will be excluded from all photos and videos. If this is not acceptable, please note your concern in the 'Additional Information' box above, and we will do our best to find a proper solution.",
   s_release: "Step 4 — Assumption of risk and release of liability",
   release: "I understand that participation in robotics activities involves inherent risks, including risks related to the handling of building materials, tools, moving mechanisms, and challenge elements that are not made of LEGO. I voluntarily accept these risks. To the fullest extent permitted by law, I release Zone01 Robotics, its staff, volunteers, and partners from liability for injury, loss, or damage arising from ordinary participation in the event, except where caused by negligence or intentional fault. I agree that event staff may seek emergency medical care for the participant if a parent or guardian cannot be reached.",
   ack_release: "I have read and agree to the assumption of risk and release of liability above. *",
@@ -386,6 +396,7 @@ fr: {
   s_media: "Consentement médias",
   media_text: "Zone01 Robotics peut-il prendre et utiliser des photos et vidéos du participant à des fins promotionnelles et éducatives ?",
   yes: "Oui", no: "Non",
+  media_no_notice: "Votre choix est respecté. Veuillez noter que des photos sont prises tout au long de l'événement et que nous ne pouvons garantir que vous serez exclu(e) de toutes les photos et vidéos. Si cela ne vous convient pas, veuillez l'indiquer dans la section « Informations complémentaires » ci-dessus et nous ferons de notre mieux pour trouver une solution appropriée.",
   s_release: "Étape 4 — Acceptation des risques et décharge de responsabilité",
   release: "Je comprends que la participation à des activités de robotique comporte des risques inhérents, notamment liés à la manipulation de matériaux de construction, d'outils, de mécanismes mobiles et d'éléments de défi qui ne sont pas en LEGO. J'accepte volontairement ces risques. Dans toute la mesure permise par la loi, je dégage Zone01 Robotics, son personnel, ses bénévoles et ses partenaires de toute responsabilité pour blessure, perte ou dommage découlant de la participation normale à l'événement, sauf en cas de négligence ou de faute intentionnelle. J'autorise le personnel de l'événement à obtenir des soins médicaux d'urgence pour le participant si un parent ou tuteur ne peut être joint.",
   ack_release: "J'ai lu et j'accepte l'acceptation des risques et la décharge de responsabilité ci-dessus. *",
@@ -499,6 +510,12 @@ function initPad(name){
   });
   ["pointerup","pointercancel","pointerleave"].forEach(ev =>
     c.addEventListener(ev, () => { state.drawing = false; }));
+  document.querySelectorAll("input[name=media]").forEach(r =>
+  r.addEventListener("change", () => {
+    document.getElementById("media-notice")
+      .classList.toggle("show", r.value === "no" && r.checked);
+  })
+);
 }
 function clearSig(name){
   const s = pads[name];

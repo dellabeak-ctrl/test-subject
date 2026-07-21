@@ -311,11 +311,14 @@ const DOCS = [
   { url: "docs/privacy_notice.pdf" },
 ];
 const ORG = "Zone01 Robotics";
+
+const SUB = "Please ensure that you have your 8-digit access code before submitting this form / Veuillez vous assurer d'avoir votre code d'accès à 8 caractères avant de soumettre ce formulaire.";
   
 /* ================= I18N ================= */
 const L = {
 en: {
   title: "Consent and Release Form 2027",
+  subtitle: SUB,
   intro: "Complete this form online — no printing needed. When you finish filling out the required information, please click 'Submit'. You may download a PDF version of this form for your person records.",
   s_docs: "Step 1 — Read the event documents",
   docs_note: "Open all three documents below. The acknowledgement checkbox unlocks once every document has been opened.",
@@ -374,6 +377,7 @@ en: {
 },
 fr: {
   title: "Formulaire de consentement et de décharge 2027",
+  subtitle: SUB,
   intro: "Remplissez ce formulaire en ligne — aucune impression requise. Une fois que vous aurez rempli tous les champs obligatoires, veuillez cliquer sur « Soumettre ». Vous pouvez télécharger une version PDF de ce formulaire pour vos dossiers personnels.",
   s_docs: "Étape 1 — Lire les documents de l'événement",
   docs_note: "Ouvrez les trois documents ci-dessous. La case de reconnaissance se déverrouille une fois tous les documents ouverts.",
@@ -624,6 +628,7 @@ async function generatePDF(d){
   page.drawText("Robot ZONE[01]", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
   y -= 18;
   text(T.title, { size: 15, bold: true, color: navy });
+  text(SUB, { size: 12, color: ink, after: 2 });
   page.drawLine({ start:{x:M,y}, end:{x:612-M,y}, thickness:1.2, color: navy });
   y -= 14;
 

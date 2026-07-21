@@ -244,7 +244,6 @@
   <div class="wrap">
     <h2 data-i18n="s_ack"></h2>
     <div class="checkrow"><input type="checkbox" id="ack-staff"><label for="ack-staff" data-i18n="ack_staff"></label></div>
-    <div class="checkrow"><input type="checkbox" id="ack-nonlego"><label for="ack-nonlego" data-i18n="ack_nonlego"></label></div>
 
     <h2 style="margin-top:22px" data-i18n="s_media"></h2>
     <p class="note" data-i18n="media_text"></p>
@@ -342,7 +341,6 @@ en: {
   g_name: "Parent/guardian full name *", g_rel: "Relationship to participant *",
   s_ack: "Step 3 — Acknowledgements",
   ack_staff: "I agree to follow all instructions given by event staff and volunteers.",
-  ack_nonlego: "I understand that some challenges include elements that are not made of LEGO, and I agree to handle them only as directed by the rules and by staff.",
   s_media: "Media consent",
   media_text: "I authorize Zone01 Robotics and its affiliated organizations to use photographs and videos of my child taken during the competition for promotional, advertising or media purposes, or for distribution to sponsors and prize donors. All other personal information relating to my child will remain confidential. Any use or disclosure not covered by this authorization shall be subject to my prior consent.",
   yes: "Yes", no: "No",
@@ -401,7 +399,6 @@ fr: {
   g_name: "Nom complet du parent/tuteur *", g_rel: "Lien avec le participant *",
   s_ack: "Étape 3 — Reconnaissances",
   ack_staff: "Je m'engage à suivre toutes les consignes du personnel et des bénévoles de l'événement.",
-  ack_nonlego: "Je comprends que certains défis comportent des éléments qui ne sont pas en LEGO et je m'engage à les manipuler uniquement selon les règles et les directives du personnel.",
   s_media: "Consentement médias",
   media_text: "J’autorise Robotique Zone01 et ses organisations affiliées à utiliser les photos et vidéos de mon enfant prises durant la compétition à des fins de promotion, de publicité ou de diffusion auprès des médias, commanditaires et donateurs de prix. Toutes les autres informations personnelles de mon enfant demeureront confidentielles. Toute utilisation ou divulgation non prévue dans la présente autorisation devra faire l’objet de mon consentement préalable.",
   yes: "Oui", no: "Non",
@@ -650,7 +647,6 @@ async function generatePDF(d){
   heading(T.s_ack.replace(/^.*?— /, ""));
   checkline(T.ack_docs);
   checkline(T.ack_staff);
-  checkline(T.ack_nonlego);
 
   heading(T.s_media);
   text((d.media === "yes" ? "[X] " + T.yes + "   [  ] " + T.no : "[  ] " + T.yes + "   [X] " + T.no) + " — " + T.media_text, { size: 9.5 });

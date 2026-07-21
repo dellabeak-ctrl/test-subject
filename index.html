@@ -294,7 +294,7 @@
   <div class="wrap">
     <div class="field" style="max-width:320px;margin-bottom:14px">
       <label for="acode" data-i18n="f_acode"></label>
-      <input type="text" id="acode" inputmode="numeric" maxlength="8" autocomplete="off">
+      <input type="text" id="acode" maxlength="8" autocomplete="off">
     </div>
     <button class="btn-main" id="btn-generate" data-i18n="generate"></button>
     <button class="btn-main" id="btn-submit" data-i18n="submit_label" disabled style="margin-left:10px"></button>
@@ -569,7 +569,7 @@ function collect(){
     ackStaff: document.getElementById("ack-staff").checked,
     ackNonlego: document.getElementById("ack-nonlego").checked,
     ackRelease: document.getElementById("ack-release").checked,
-    accessCode: val("acode"),
+    accessCode: val("acode").toUpperCase(),
     lang, generated: new Date().toISOString(),
   };
 }
@@ -579,7 +579,7 @@ function validate(d){
   const T = L[lang];
   if (!d.ackDocs) errs.push(T.err_docs);
   const req = [d.firstname, d.lastname, d.ptype, d.gender, d.birthday, d.econtact, d.ephone];
-  if (!/^\d{8}$/.test(d.accessCode)) errs.push(T.err_acode);
+  if (!/^[A-Za-z0-9]{8}$/.test(d.accessCode)) errs.push(T.err_acode);
   if (d.minor) req.push(d.gname, d.grel);
   if (req.some(v => !v)) errs.push(T.err_required);
   if (!d.ackStaff || !d.ackNonlego) errs.push(T.err_ack);

@@ -584,6 +584,8 @@ async function generatePDF(d){
   const { PDFDocument, StandardFonts, rgb } = PDFLib;
   const T = L[lang];
   const pdf = await PDFDocument.create();
+  const logoBytes = await fetch("logo.png").then(r => r.arrayBuffer());
+  const logo = await pdf.embedPng(logoBytes);
   pdf.registerFontkit(fontkit);
   const brandBytes = await fetch("qhyts___.ttf").then(r => r.arrayBuffer());
   const brand = await pdf.embedFont(brandBytes);
@@ -623,8 +625,10 @@ async function generatePDF(d){
   function checkline(t){ text("[X]  " + t, { size: 9.5, after: 3 }); }
 
   // Header
-  page.drawText("Robot ZONE[01]", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
-  y -= 18;
+  const logoH = 36;                                  // height on the page, in points
+  const logoW = logoH * (logo.width / logo.height);  // keep aspect ratio
+  page.drawImage(logo, { x: M, y: y - logoH, width: logoW, height: logoH });
+  y -= logoH + 10;
   text(T.title, { size: 15, bold: true, color: navy });
   text(T.subtitle, { size: 12, color: ink, after: 2 });
   page.drawLine({ start:{x:M,y}, end:{x:612-M,y}, thickness:1.2, color: navy });

@@ -292,7 +292,12 @@
 
 <div class="band">
   <div class="wrap">
+    <div class="field" style="max-width:320px;margin-bottom:14px">
+      <label for="acode" data-i18n="f_acode"></label>
+      <input type="text" id="acode" inputmode="numeric" maxlength="8" autocomplete="off">
+    </div>
     <button class="btn-main" id="btn-generate" data-i18n="generate"></button>
+    <button class="btn-main" id="btn-submit" data-i18n="submit_label" disabled style="margin-left:10px"></button>
     <div class="errors" id="errors"></div>
     <div class="success" id="success"></div>
     <p class="steps" data-i18n="next_steps"></p>
@@ -358,6 +363,9 @@ en: {
   sig_g_label: "Parent/guardian signature (draw below) *",
   sig_hint: "Draw with your mouse or finger.",
   clear: "Clear",
+  f_acode: "Enter your 8-digit access code: *",
+  err_acode: "Enter a valid 8-digit access code.",
+  submit_label: "Submit",
   generate: "Generate my signed PDF",
   next_steps: "Next step: Submit this information using the button above!",
   footer: "Questions? Contact us at info@zone01.ca.",
@@ -416,6 +424,9 @@ fr: {
   sig_g_label: "Signature du parent/tuteur (dessinez ci-dessous) *",
   sig_hint: "Dessinez avec la souris ou le doigt.",
   clear: "Effacer",
+  f_acode: "Entrez votre code d'accès à 8 chiffres : *",
+  err_acode: "Entrez un code d'accès valide à 8 chiffres.",
+  submit_label: "Soumettre",
   generate: "Générer mon PDF signé",
   next_steps: "Prochaine étape : Envoyez ces renseignements en cliquant sur le bouton ci-dessus !",
   footer: "Des questions ? Écrivez-nous à info@zone01.ca.",
@@ -558,6 +569,7 @@ function collect(){
     ackStaff: document.getElementById("ack-staff").checked,
     ackNonlego: document.getElementById("ack-nonlego").checked,
     ackRelease: document.getElementById("ack-release").checked,
+    accessCode: val("acode"),
     lang, generated: new Date().toISOString(),
   };
 }
@@ -567,6 +579,7 @@ function validate(d){
   const T = L[lang];
   if (!d.ackDocs) errs.push(T.err_docs);
   const req = [d.firstname, d.lastname, d.ptype, d.gender, d.birthday, d.econtact, d.ephone];
+  if (!/^\d{8}$/.test(d.accessCode)) errs.push(T.err_acode);
   if (d.minor) req.push(d.gname, d.grel);
   if (req.some(v => !v)) errs.push(T.err_required);
   if (!d.ackStaff || !d.ackNonlego) errs.push(T.err_ack);
@@ -676,8 +689,8 @@ async function generatePDF(d){
 
   // Machine-readable payload for registration-page parsing
   pdf.setTitle("Consent & Release — " + d.firstname + " " + d.lastname);
-  pdf.setSubject("Z01CONSENT:" + JSON.stringify(d));
-  pdf.setProducer(ORG + " online consent form");
+  const { accessCode, ...meta } = d;
+  pdf.setSubject("Z01CONSENT:" + JSON.stringify(meta));  pdf.setProducer(ORG + " online consent form");
 
   const bytes = await pdf.save();
   const blob = new Blob([bytes], { type: "application/pdf" });

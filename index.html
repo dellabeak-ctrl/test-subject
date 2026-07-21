@@ -307,13 +307,11 @@ const DOCS = [
   { url: "docs/team_checklist.pdf" },
 ];
 const ORG = "Zone01 Robotics";
-const EVENT = "[Regional Competition 2027]";
-
+  
 /* ================= I18N ================= */
 const L = {
 en: {
-  title: "Consent and Release Form",
-  subtitle: EVENT,
+  title: "Consent and Release Form 2027",
   intro: "Complete this form online — no printing needed. When you finish, a signed PDF downloads to your device. Upload that PDF on the registration page to complete your registration.",
   s_docs: "Step 1 — Read the event documents",
   docs_note: "Open all three documents below. The acknowledgement checkbox unlocks once every document has been opened.",
@@ -366,8 +364,7 @@ en: {
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
 fr: {
-  title: "Formulaire de consentement et de décharge",
-  subtitle: EVENT,
+  title: "Formulaire de consentement et de décharge 2027",
   intro: "Remplissez ce formulaire en ligne — aucune impression requise. À la fin, un PDF signé se télécharge sur votre appareil. Téléversez ce PDF sur la page d'inscription pour compléter votre inscription.",
   s_docs: "Étape 1 — Lire les documents de l'événement",
   docs_note: "Ouvrez les trois documents ci-dessous. La case de reconnaissance se déverrouille une fois tous les documents ouverts.",
@@ -607,7 +604,6 @@ async function generatePDF(d){
   page.drawText("Robot ZONE[01]", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
   y -= 18;
   text(T.title, { size: 15, bold: true, color: navy });
-  text(EVENT, { size: 9.5, color: grey, after: 2 });
   page.drawLine({ start:{x:M,y}, end:{x:612-M,y}, thickness:1.2, color: navy });
   y -= 14;
 

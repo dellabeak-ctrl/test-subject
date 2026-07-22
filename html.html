@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consent &amp; Release — Zone01 Robotics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+<link rel="icon" type="image/png" href="favicon1.png">
+<style>
+  :root{
+    --magenta:#C81E5B;
+    --red:#C81E5B;
+    --red:#E30613;
+    --purple:#7B2D8B;
+    --ink:#3a3a3a;
+    --label:#6d757d;
+    --band:#f2f2f2;
+    --line:#d9d9d9;
+    --green:#1e8e4e;
+    --green-bg:#e9f7ef;
+  }
+
+    @font-face {
+    font-family: 'Qhytsdakx';
+    src: url('qhyts___.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Mulish','Segoe UI',system-ui,-apple-system,sans-serif;
+    color:var(--ink);background:#fff;font-size:15px;line-height:1.5;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+  .band{padding:26px 0}
+  .band.grey{background:var(--band)}
+
+  /* header */
+  header{border-bottom:1px solid var(--line);padding:16px 0}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  .brand{font-weight:800;letter-spacing:.5px;font-size:34px;font-family:'Qhytsdakx',sans-serif}
+
+  /* .brand{font-weight:800;letter-spacing:.5px;font-size:18px} */
+  .brand span{color:var(--red);border-bottom:3px solid var(--red);padding-bottom:1px}
+  .lang-toggle{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+  .lang-toggle button{
+    border:0;background:#fff;padding:6px 16px;font:inherit;font-weight:700;
+    color:var(--label);cursor:pointer;
+  }
+  .lang-toggle button.on{background:linear-gradient(90deg,var(--red),var(--red));color:#fff}
+
+  h1{font-size:24px;font-weight:800;margin-bottom:4px}
+  .subtitle{color:var(--label)}
+  h2{color:var(--magenta);font-size:17px;font-weight:800;margin-bottom:14px}
+  .note{color:var(--label);font-size:14px}
+  .note b{color:var(--ink)}
+
+  /* doc cards */
+  .docs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+  @media(max-width:700px){.docs{grid-template-columns:1fr}}
+  .doc{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;
+    display:flex;flex-direction:column;gap:8px;transition:border-color .2s, background .2s;
+  }
+  .doc.read{border-color:var(--green);background:var(--green-bg)}
+  .doc .status{font-size:12.5px;font-weight:700;color:var(--label);display:flex;align-items:center;gap:6px}
+  .doc.read .status{color:var(--green)}
+  .doc .status .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);
+    display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+  .doc.read .status .dot{background:var(--green);border-color:var(--green)}
+  .doc a{color:var(--purple);font-weight:700;text-decoration:underline}
+  .doc p{font-size:13px;color:var(--label)}
+
+  .media-notice{
+  display:none;margin-top:10px;padding:12px 14px;
+  background:#fff;border-left:4px solid var(--magenta);
+  border-radius:6px;font-size:13.5px;color:var(--ink);
+  }
+  .media-notice.show{display:block}
+
+  .gate{
+    display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:14px;margin-top:6px;
+  }
+  .gate.locked{opacity:.55}
+  .gate input{margin-top:3px;width:17px;height:17px;flex:none}
+  .gate .lockmsg{font-size:12.5px;color:var(--magenta);font-weight:700;margin-top:4px}
+
+  /* form grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px}
+  @media(max-width:700px){.grid{grid-template-columns:1fr}}
+  .field label{display:block;color:var(--label);font-weight:600;margin-bottom:5px;font-size:14px}
+  .field label .req{color:var(--magenta)}
+  .field input[type=text],.field input[type=tel],.field input[type=date],.field select,.field textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;
+    font:inherit;color:var(--ink);background:#fff;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:2px solid var(--purple);outline-offset:0;border-color:var(--purple);
+  }
+  .field.full{grid-column:1 / -1}
+  .guardian-box{
+    grid-column:1 / -1;border:1px dashed var(--magenta);border-radius:8px;padding:14px;
+    background:#fff;display:none;
+  }
+  .guardian-box.show{display:block}
+  .guardian-box h3{color:var(--magenta);font-size:14.5px;margin-bottom:10px}
+
+  /* checkboxes & radios */
+  .checkrow{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .checkrow input{margin-top:3px;width:17px;height:17px;flex:none}
+  .radios{display:flex;gap:26px;margin-top:6px}
+  .radios label{display:flex;gap:8px;align-items:center;font-weight:600;color:var(--ink)}
+
+
+  /* release text */
+  .release{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;
+    max-height:170px;overflow-y:auto;font-size:13.5px;color:var(--ink);margin-bottom:12px;
+  }
+
+  .release p{margin-bottom:9px}
+  .release p:last-child{margin-bottom:0}
+
+  /* signature */
+  .sig-block{margin-bottom:18px}
+  .sig-canvas{
+    border:1px solid var(--line);border-radius:8px;background:#fff;width:100%;height:130px;
+    touch-action:none;cursor:crosshair;display:block;
+  }
+  .sig-tools{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+  .sig-tools button{
+    border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 12px;
+    font:inherit;font-size:13px;color:var(--label);cursor:pointer;
+  }
+  .sig-hint{font-size:12.5px;color:var(--label)}
+
+  /* actions */
+  .btn-main{
+    border:0;border-radius:6px;padding:13px 26px;font:inherit;font-weight:800;font-size:15px;
+    color:#fff;background:linear-gradient(90deg,var(--red),var(--red));cursor:pointer;
+  }
+  .btn-main:disabled{opacity:.5;cursor:not-allowed}
+  .errors{color:var(--red);font-weight:700;font-size:14px;margin-top:10px;white-space:pre-line}
+  .success{color:var(--green);font-weight:700;font-size:14px;margin-top:10px}
+  .steps{color:var(--label);font-size:13.5px;margin-top:14px}
+  footer{padding:20px 0;color:var(--label);font-size:12.5px;border-top:1px solid var(--line);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">Robot ZONE <span>[01]</span></div>
+    <div class="lang-toggle">
+      <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="btn-fr" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+</header>
+
+<div class="band">
+  <div class="wrap">
+    <h1 data-i18n="title"></h1>
+    <div class="subtitle" data-i18n="subtitle"></div>
+    <p class="note" style="margin-top:10px" data-i18n="intro"></p>
+  </div>
+</div>
+
+<div class="band grey">
+  <div class="wrap">
+    <h2 data-i18n="s_docs"></h2>
+    <p class="note" data-i18n="docs_note"></p>
+    <div class="docs">
+      <div class="doc" id="doc-0">
+        <div class="status"><span class="dot">✓</span><span data-i18n="unread" class="st-label"></span></div>
+        <a href="#" target="_blank" rel="noopener" data-doc="0" data-i18n="doc0_name"></a>
+        <p data-i18n="doc0_desc"></p>
+      </div>
+      <div class="doc" id="doc-1">
+        <div class="status"><span class="dot">✓</span><span data-i18n="unread" class="st-label"></span></div>
+        <a href="#" target="_blank" rel="noopener" data-doc="1" data-i18n="doc1_name"></a>
+        <p data-i18n="doc1_desc"></p>
+      </div>
+      <div class="doc" id="doc-2">
+        <div class="status"><span class="dot">✓</span><span data-i18n="unread" class="st-label"></span></div>
+        <a href="#" target="_blank" rel="noopener" data-doc="2" data-i18n="doc2_name"></a>
+        <p data-i18n="doc2_desc"></p>
+      </div>
+    </div>
+    <div class="gate locked" id="gate">
+      <input type="checkbox" id="ack-docs" disabled>
+      <div>
+        <label for="ack-docs" data-i18n="ack_docs"></label>
+        <div class="lockmsg" id="lockmsg" data-i18n="lockmsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="band">
+  <div class="wrap">
+    <h2 data-i18n="s_info"></h2>
+    <div class="grid">
+      <div class="field"><label data-i18n="f_first"></label><input type="text" id="firstname"></div>
+      <div class="field"><label data-i18n="f_last"></label><input type="text" id="lastname"></div>
+      <div class="field"><label data-i18n="f_type"></label>
+        <select id="ptype">
+          <option value="" data-i18n="opt_select"></option>
+          <option value="participant" data-i18n="opt_participant"></option>
+          <option value="coach" data-i18n="opt_coach"></option>
+          <option value="staff" data-i18n="opt_staff"></option>
+        </select>
+      </div>
+      <div class="field"><label data-i18n="f_gender"></label>
+        <select id="gender">
+          <option value="" data-i18n="opt_select"></option>
+          <option value="F" data-i18n="opt_f"></option>
+          <option value="M" data-i18n="opt_m"></option>
+          <option value="X" data-i18n="opt_x"></option>
+          <option value="-" data-i18n="opt_na"></option>
+        </select>
+      </div>
+      <div class="field"><label data-i18n="f_bday"></label><input type="date" id="birthday"></div>
+      <div class="field"><label data-i18n="f_school"></label><input type="text" id="school"></div>
+      <div class="field"><label data-i18n="f_econtact"></label><input type="text" id="econtact"></div>
+      <div class="field"><label data-i18n="f_ephone"></label><input type="tel" id="ephone"></div>
+      <div class="field"><label data-i18n="f_medical"></label><input type="text" id="medical"></div>
+      <div class="field"><label data-i18n="f_additional"></label><input type="text" id="additional"></div>
+      <div class="guardian-box" id="guardian-box">
+        <h3 data-i18n="g_title"></h3>
+        <div class="grid">
+          <div class="field"><label data-i18n="g_name"></label><input type="text" id="gname"></div>
+          <div class="field"><label data-i18n="g_rel"></label><input type="text" id="grel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="band grey">
+  <div class="wrap">
+    <h2 data-i18n="s_ack"></h2>
+    <div class="checkrow"><input type="checkbox" id="ack-staff"><label for="ack-staff" data-i18n="ack_staff"></label></div>
+
+    <h2 style="margin-top:22px" data-i18n="s_media"></h2>
+    <p class="note" data-i18n="media_text"></p>
+    <div class="radios">
+      <label><input type="radio" name="media" value="yes"><span data-i18n="yes"></span></label>
+      <label><input type="radio" name="media" value="no"><span data-i18n="no"></span></label>
+    </div>
+    <div class="media-notice" id="media-notice" data-i18n="media_no_notice"></div>
+  </div>
+</div>
+
+
+<div class="band">
+  <div class="wrap">
+    <h2 data-i18n="s_release"></h2>
+    <div class="release" id="release-text"></div>
+    <div class="checkrow"><input type="checkbox" id="ack-release"><label for="ack-release" data-i18n="ack_release"></label></div>
+  </div>
+</div>
+
+<div class="band grey">
+  <div class="wrap">
+    <h2 data-i18n="s_sign"></h2>
+    <div class="sig-block">
+      <div class="field" style="max-width:420px;margin-bottom:8px">
+        <label data-i18n="sig_p_label"></label>
+      </div>
+      <canvas class="sig-canvas" id="sig-participant"></canvas>
+      <div class="sig-tools">
+        <span class="sig-hint" data-i18n="sig_hint"></span>
+        <button type="button" onclick="clearSig('participant')" data-i18n="clear"></button>
+      </div>
+    </div>
+    <div class="sig-block" id="sig-guardian-block" style="display:none">
+      <div class="field" style="max-width:420px;margin-bottom:8px">
+        <label data-i18n="sig_g_label"></label>
+      </div>
+      <canvas class="sig-canvas" id="sig-guardian"></canvas>
+      <div class="sig-tools">
+        <span class="sig-hint" data-i18n="sig_hint"></span>
+        <button type="button" onclick="clearSig('guardian')" data-i18n="clear"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="band">
+  <div class="wrap">
+    <div class="field" style="max-width:320px;margin-bottom:14px">
+      <label for="acode" data-i18n="f_acode"></label>
+      <input type="text" id="acode" maxlength="8" autocomplete="off">
+    </div>
+    <button class="btn-main" id="btn-generate" data-i18n="generate"></button>
+    <button class="btn-main" id="btn-submit" data-i18n="submit_label" disabled style="margin-left:10px"></button>
+    <div class="errors" id="errors"></div>
+    <div class="success" id="success"></div>
+    <p class="steps" data-i18n="next_steps"></p>
+  </div>
+</div>
+
+<footer><div class="wrap" data-i18n="footer"></div></footer>
+
+
+<script>
+/* ================= CONFIG — replace with real hosted URLs ================= */
+const DOCS = [
+  { url: "safety_reqs.pdf" },
+  { url: "code_of_conduct.pdf" },
+  { url: "docs/privacy_notice.pdf" },
+];
+const ORG = "Zone01 Robotics";
+  
+/* ================= I18N ================= */
+const L = {
+en: {
+  title: "Consent and Release Form 2027",
+  subtitle: "Please ensure that you have received your 8-digit access code before submitting this form.",
+  intro: "Complete this form online — no printing needed. When you finish filling out the required information, please click 'Submit'. You may download a PDF version of this form for your person records.",
+  s_docs: "Step 1 — Read the event documents",
+  docs_note: "Open all three documents below. The acknowledgement checkbox unlocks once every document has been opened.",
+  doc0_name: "Safety Requirements & Protocols",
+  doc0_desc: "Guidelines for participants, coaches, and event staff.",
+  doc1_name: "Code of Conduct",
+  doc1_desc: "How we treat each other, our equipment, and the competition.",
+  doc2_name: "Privacy Notice",
+  doc2_desc: "Privacy and media authorization information.",
+  unread: "Not opened yet", read: "Opened",
+  ack_docs: "I have read the Safety Requirements & Protocols, the Code of Conduct, and the Privacy Notice, and I agree to follow them.",
+  lockmsg: "Open all three documents above to unlock this checkbox.",
+  s_info: "Step 2 — Participant information",
+  f_first: "First name *", f_last: "Last name *", f_type: "Person type *",
+  f_gender: "Gender *", f_bday: "Date of birth *",
+  f_school: "School or club", f_econtact: "Emergency contact — name *",
+  f_ephone: "Emergency contact — phone *", f_medical: "Allergies or medical notes",
+  f_additional: "Any additional information",
+  opt_select: "--- Select ---", opt_participant: "Participant", opt_coach: "Coach",
+  opt_staff: "Staff / Volunteer", opt_f: "Female", opt_m: "Male", opt_x: "Other",
+  opt_na: "Prefer not to say",
+  g_title: "Participant is under 18 — a parent or guardian must complete and sign this form.",
+  g_name: "Parent/guardian full name *", g_rel: "Relationship to participant *",
+  s_ack: "Step 3 — Acknowledgements",
+  ack_staff: "I agree to follow all instructions given by event staff and volunteers.",
+  s_media: "Media consent",
+  media_text: "I authorize Zone01 Robotics and its affiliated organizations to use photographs and videos of my child taken during the competition for promotional, advertising or media purposes, or for distribution to sponsors and prize donors. All other personal information relating to my child will remain confidential. Any use or disclosure not covered by this authorization shall be subject to my prior consent.",
+  yes: "Yes", no: "No",
+  media_no_notice: "Your choice is respected. Please note that photos are taken throughout the event, and we cannot guarantee that your child will be excluded from all photos and videos. The Media Authorization information can be found in the form at the top of this page. Therefore, if you selected 'NO' in this step, please note that you are responsible for ensuring the privacy of your own child during the events (for example, wearing a hat and sunglasses). Additionally, as photos and videos are taken of winners as they recieve their awards on stage, we ask that students who do not consent to the media release do not go onstage, and wait to recieve their award.",
+  s_release: "Step 4 — Assumption of risk and release of liability",
+  release: [
+    "I agree to comply with the rules of the Zone01 Robotics competition and to ensure that my child is aware of and complies with them as well.",
+    "I understand that taking part in a robotics competition involves certain inherent risks, particularly those associated with the use of moving parts, computers, batteries and tools. I accept these risks. I release Zone01 Robotics, its employees, volunteers and partners from any liability for any injury, loss or damage resulting from normal participation in the event, except in cases of negligence or wilful misconduct. I also authorize event staff to seek the necessary emergency medical care for my child if I cannot be contacted within a reasonable time.",
+    "I understand that if my child behaves inappropriately, compromises the safety of others, causes damage or fails to comply with the competition rules, they may be disqualified or expelled from the event. In such a case, the registration fee will not be refunded.",
+    "If transport costs are incurred for my child’s return journey and no parent or relative is able to collect them, I agree to reimburse these costs to Zone01 Robotics. I also remain liable for any damage caused by my child to other people or their property.",
+    ],
+  ack_release: "I have read and agree to the assumption of risk and release of liability above. *",
+  s_sign: "Step 5 — Signature",
+  sig_p_label: "Participant signature (draw below) *",
+  sig_g_label: "Parent/guardian signature (draw below) *",
+  sig_hint: "Draw with your mouse or finger.",
+  clear: "Clear",
+  f_acode: "Enter your 8-digit access code: *",
+  err_acode: "Enter a valid 8-digit access code.",
+  submit_label: "Submit",
+  generate: "Generate my signed PDF",
+  next_steps: "Next step: Submit this information using the button above!",
+  footer: "Questions? Contact us at info@zone01.ca.",
+  err_docs: "Open all three documents and check the acknowledgement box.",
+  err_required: "Fill in all required fields marked with *.",
+  err_ack: "Check the required acknowledgement boxes.",
+  err_media: "Select Yes or No for media consent.",
+  err_sig_p: "Draw the participant signature.",
+  err_sig_g: "Draw the parent/guardian signature.",
+  err_release: "Confirm the release of liability checkbox.",
+  success: "Done! Your consent information has been shared with the Zone01 team. A PDF copy is available for download.",
+  pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
+},
+fr: {
+  title: "Formulaire de consentement et de décharge 2027",
+  subtitle: "Veuillez vous assurer d'avoir bien reçu votre code d'accès à 8 caractères avant de soumettre ce formulaire.",
+  intro: "Remplissez ce formulaire en ligne — aucune impression requise. Une fois que vous aurez rempli tous les champs obligatoires, veuillez cliquer sur « Soumettre ». Vous pouvez télécharger une version PDF de ce formulaire pour vos dossiers personnels.",
+  s_docs: "Étape 1 — Lire les documents de l'événement",
+  docs_note: "Ouvrez les trois documents ci-dessous. La case de reconnaissance se déverrouille une fois tous les documents ouverts.",
+  doc0_name: "Exigences et protocoles de sécurité",
+  doc0_desc: "Consignes pour les participants, entraîneurs, et personnel.",
+  doc1_name: "Code d'éthique",
+  doc1_desc: "Comment nous traitons les autres, l'équipement et la compétition.",
+  doc2_name: "Politique de confidentialité",
+  doc2_desc: "Renseignements sur la protection de la vie privée et les autorisations relatives aux médias.",
+  unread: "Pas encore ouvert", read: "Ouvert",
+  ack_docs: "J'ai lu les Exigences et protocoles de sécurité, le Code d'éthique et la Politique de confidentialité, et je m'engage à les respecter.",
+  lockmsg: "Ouvrez les trois documents ci-dessus pour déverrouiller cette case.",
+  s_info: "Étape 2 — Renseignements sur le participant",
+  f_first: "Prénom *", f_last: "Nom de famille *", f_type: "Type de personne *",
+  f_gender: "Genre *", f_bday: "Date de naissance *", 
+  f_school: "École ou club", f_econtact: "Contact d'urgence — nom *",
+  f_ephone: "Contact d'urgence — téléphone *", f_medical: "Allergies ou notes médicales",
+  f_additional: "Toute information supplémentaire",
+  opt_select: "--- Sélectionner ---", opt_participant: "Participant(e)", opt_coach: "Entraîneur(e)",
+  opt_staff: "Personnel / Bénévole", opt_f: "Féminin", opt_m: "Masculin", opt_x: "Autre",
+  opt_na: "Préfère ne pas répondre",
+  g_title: "Le participant a moins de 18 ans — un parent ou tuteur doit remplir et signer ce formulaire.",
+  g_name: "Nom complet du parent/tuteur *", g_rel: "Lien avec le participant *",
+  s_ack: "Étape 3 — Reconnaissances",
+  ack_staff: "Je m'engage à suivre toutes les consignes du personnel et des bénévoles de l'événement.",
+  s_media: "Consentement médias",
+  media_text: "J’autorise Robotique Zone01 et ses organisations affiliées à utiliser les photos et vidéos de mon enfant prises durant la compétition à des fins de promotion, de publicité ou de diffusion auprès des médias, commanditaires et donateurs de prix. Toutes les autres informations personnelles de mon enfant demeureront confidentielles. Toute utilisation ou divulgation non prévue dans la présente autorisation devra faire l’objet de mon consentement préalable.",
+  yes: "Oui", no: "Non",
+  media_no_notice: "Votre choix est respecté. Veuillez noter que des photos seront prises tout au long de l’événement et que nous ne pouvons garantir que votre enfant ne figurera sur aucune photo ni vidéo. Vous trouverez les informations relatives à l’autorisation de diffusion dans le formulaire en haut de cette page. Par conséquent, si vous avez sélectionné « NON » à cette étape, vous êtes responsable d'assurer la protection de la vie privée de votre enfant pendant les événements (par exemple, en lui faisant porter une casquette et des lunettes de soleil). De plus, comme des photos et des vidéos sont prises des gagnants lorsqu’ils reçoivent leur prix sur scène, nous demandons aux élèves qui ne consentent pas à l’autorisation de diffusion médiatique de ne pas monter sur scène et d’attendre pour recevoir leur prix.",
+  s_release: "Étape 4 — Acceptation des risques et décharge de responsabilité",
+  release: [
+    "Je m’engage à respecter les règles de la compétition Robotique Zone01 et à veiller à ce que mon enfant les connaisse et les respecte également.",
+    "Je comprends que la participation à une compétition de robotique comporte certains risques inhérents, notamment liés à l’utilisation de pièces mobiles, d’ordinateurs, de batteries et d’outils. J’accepte ces risques. Je dégage Robotique Zone01, ses employés, bénévoles et partenaires de toute responsabilité pour toute blessure, perte ou tout dommage résultant de la participation normale à l’événement, sauf en cas de négligence ou de faute intentionnelle. J’autorise également le personnel de l’événement à obtenir les soins médicaux d’urgence nécessaires pour mon enfant si je ne peux être joint dans un délai raisonnable.",
+    "Je comprends que si mon enfant adopte un comportement inapproprié, compromet la sécurité d’autrui, cause des dommages ou ne respecte pas les règles de la compétition, il pourrait être disqualifié ou expulsé de l’événement. Dans ce cas, les frais d’inscription ne seront pas remboursés.",
+    "Si des frais de transport doivent être engagés pour son retour et qu’aucun parent ou proche ne peut venir le chercher, je m’engage à rembourser ces frais à Robotique Zone01. Je demeure également responsable des dommages causés par mon enfant à autrui ou aux biens d’autrui.",
+    ],
+  ack_release: "J'ai lu et j'accepte l'acceptation des risques et la décharge de responsabilité ci-dessus. *",
+  s_sign: "Étape 5 — Signature",
+  sig_p_label: "Signature du participant (dessinez ci-dessous) *",
+  sig_g_label: "Signature du parent/tuteur (dessinez ci-dessous) *",
+  sig_hint: "Dessinez avec la souris ou le doigt.",
+  clear: "Effacer",
+  f_acode: "Entrez votre code d'accès à 8 caractères : *",
+  err_acode: "Entrez un code d'accès valide à 8 caractères.",
+  submit_label: "Soumettre",
+  generate: "Générer mon PDF signé",
+  next_steps: "Prochaine étape : Envoyez ces renseignements en cliquant sur le bouton ci-dessus !",
+  footer: "Des questions ? Écrivez-nous à info@zone01.ca.",
+  err_docs: "Ouvrez les trois documents et cochez la case de reconnaissance.",
+  err_required: "Remplissez tous les champs obligatoires marqués d'un *.",
+  err_ack: "Cochez les cases de reconnaissance obligatoires.",
+  err_media: "Sélectionnez Oui ou Non pour le consentement médias.",
+  err_sig_p: "Dessinez la signature du participant.",
+  err_sig_g: "Dessinez la signature du parent/tuteur.",
+  err_release: "Confirmez la case de décharge de responsabilité.",
+  success: "Terminé ! Les renseignements relatifs à votre consentement ont été transmis à l’équipe de Zone01. Une copie en format PDF est disponible en téléchargement.",
+  pdf_generated: "Généré en ligne le", pdf_media_yes: "OUI", pdf_media_no: "NON",
+}};
+
+let lang = "en";
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById("btn-en").classList.toggle("on", l==="en");
+  document.getElementById("btn-fr").classList.toggle("on", l==="fr");
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const k = el.getAttribute("data-i18n");
+    if (L[l][k] !== undefined) el.textContent = L[l][k];
+  });
+  document.querySelectorAll(".doc").forEach((d,i) => {
+    d.querySelector(".st-label").textContent = docRead[i] ? L[l].read : L[l].unread;
+  });
+  const rel = document.getElementById("release-text");
+rel.innerHTML = "";
+L[l].release.forEach(p => {
+  const el = document.createElement("p");
+  el.textContent = p;
+  rel.appendChild(el);
+});
+}
+
+/* ================= DOC LINK GATING ================= */
+const docRead = [false, false, false];
+document.querySelectorAll(".doc a").forEach(a => {
+  const i = +a.dataset.doc;
+  a.href = DOCS[i].url;
+  a.addEventListener("click", () => {
+    docRead[i] = true;
+    const card = document.getElementById("doc-"+i);
+    card.classList.add("read");
+    card.querySelector(".st-label").textContent = L[lang].read;
+    if (docRead.every(Boolean)) {
+      const box = document.getElementById("ack-docs");
+      box.disabled = false;
+      document.getElementById("gate").classList.remove("locked");
+      document.getElementById("lockmsg").style.display = "none";
+    }
+  });
+});
+
+/* ================= AGE / GUARDIAN ================= */
+function ageOn(dateStr){
+  if (!dateStr) return null;
+  const b = new Date(dateStr + "T00:00:00"), t = new Date();
+  let a = t.getFullYear() - b.getFullYear();
+  if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
+  return a;
+}
+function isMinor(){ const a = ageOn(document.getElementById("birthday").value); return a !== null && a < 18; }
+document.getElementById("birthday").addEventListener("change", () => {
+  const minor = isMinor();
+  document.getElementById("guardian-box").classList.toggle("show", minor);
+  document.getElementById("sig-guardian-block").style.display = minor ? "" : "none";
+  if (minor) requestAnimationFrame(() => pads.guardian && pads.guardian.resize());
+});
+
+/* ================= SIGNATURE PADS ================= */
+const pads = {};
+function initPad(name){
+  const c = document.getElementById("sig-"+name);
+  const ctx = c.getContext("2d");
+  const state = { drawing:false, strokes:0, canvas:c, ctx };
+  pads[name] = state;
+  function resize(){
+    const data = c.toDataURL();
+    const r = c.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    c.width = r.width * dpr; c.height = 130 * dpr;
+    ctx.scale(dpr, dpr);
+    ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#1a2e5a";
+    if (state.strokes > 0){
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, r.width, 130);
+      img.src = data;
+    }
+  }
+  state.resize = resize;
+  resize();
+  window.addEventListener("resize", resize);
+  function pos(e){
+    const r = c.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  c.addEventListener("pointerdown", e => {
+    e.preventDefault(); c.setPointerCapture(e.pointerId);
+    if (c.width === 0) resize();          // pad was initialized while hidden
+    if (c.width === 0) return;            // still hidden — don't count a stroke
+    state.drawing = true; state.strokes++;
+    const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x+0.1, p.y+0.1); ctx.stroke();
+  });
+  c.addEventListener("pointermove", e => {
+    if (!state.drawing) return;
+    const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev =>
+    c.addEventListener(ev, () => { state.drawing = false; }));
+  document.querySelectorAll("input[name=media]").forEach(r =>
+  r.addEventListener("change", () => {
+    document.getElementById("media-notice")
+      .classList.toggle("show", r.value === "no" && r.checked);
+  })
+);
+}
+function clearSig(name){
+  const s = pads[name];
+  s.ctx.clearRect(0, 0, s.canvas.width, s.canvas.height);
+  s.strokes = 0;
+}
+initPad("participant");
+initPad("guardian");
+
+/* ================= VALIDATION + PDF ================= */
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function collect(){
+  return {
+    firstname: val("firstname"), lastname: val("lastname"),
+    ptype: val("ptype"), gender: val("gender"), birthday: val("birthday"),
+    school: val("school"),
+    econtact: val("econtact"), ephone: val("ephone"), medical: val("medical"),
+    additional: val("additional"),
+    minor: isMinor(), gname: val("gname"), grel: val("grel"),
+    media: (document.querySelector("input[name=media]:checked") || {}).value || "",
+    ackDocs: document.getElementById("ack-docs").checked,
+    ackStaff: document.getElementById("ack-staff").checked,
+    ackRelease: document.getElementById("ack-release").checked,
+    accessCode: val("acode").toUpperCase(),
+    lang, generated: new Date().toISOString(),
+  };
+}
+
+function validate(d){
+  const errs = [];
+  const T = L[lang];
+  if (!d.ackDocs) errs.push(T.err_docs);
+  const req = [d.firstname, d.lastname, d.ptype, d.gender, d.birthday, d.econtact, d.ephone];
+  if (!/^[A-Za-z0-9]{8}$/.test(d.accessCode)) errs.push(T.err_acode);
+  if (d.minor) req.push(d.gname, d.grel);
+  if (req.some(v => !v)) errs.push(T.err_required);
+  if (!d.ackStaff) errs.push(T.err_ack);
+  if (!d.media) errs.push(T.err_media);
+  if (!d.ackRelease) errs.push(T.err_release);
+  if (pads.participant.strokes === 0) errs.push(T.err_sig_p);
+  if (d.minor && pads.guardian.strokes === 0) errs.push(T.err_sig_g);
+  return errs;
+}
+
+async function generatePDF(d){
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+  const T = L[lang];
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  let logo = null;
+  try {
+    const logoBytes = await fetch("logo.png").then(r => { if (!r.ok) throw new Error("logo HTTP " + r.status); return r.arrayBuffer(); });
+    logo = await pdf.embedPng(logoBytes);
+  } catch (logoErr) { console.warn("Logo unavailable, using text header:", logoErr); }
+  let brand = bold;
+  try {
+    pdf.registerFontkit(fontkit);
+    const brandBytes = await fetch("qhyts___.ttf").then(r => { if (!r.ok) throw new Error("font HTTP " + r.status); return r.arrayBuffer(); });
+    brand = await pdf.embedFont(brandBytes);
+  } catch (fontErr) { console.warn("Brand font unavailable, using Helvetica Bold:", fontErr); }
+  const navy = rgb(0.10, 0.18, 0.35), grey = rgb(0.4, 0.4, 0.4), black = rgb(0.1,0.1,0.1), ink = rgb(0.23, 0.23, 0.23);
+  let page = pdf.addPage([612, 792]);
+  let y = 748;
+  const M = 54, W = 612 - 2*M;
+
+  function ensure(h){ if (y - h < 54){ page = pdf.addPage([612, 792]); y = 748; } }
+  function text(t, opts={}){
+    const size = opts.size || 10, f = opts.bold ? bold : font, color = opts.color || black;
+    const words = String(t).split(" ");
+    let line = "";
+    const lines = [];
+    for (const w of words){
+      const test = line ? line + " " + w : w;
+      if (f.widthOfTextAtSize(test, size) > W && line){ lines.push(line); line = w; }
+      else line = test;
+    }
+    if (line) lines.push(line);
+    for (const ln of lines){
+      ensure(size + 4);
+      page.drawText(ln, { x: M, y, size, font: f, color });
+      y -= size + 4;
+    }
+    y -= opts.after || 0;
+  }
+  function heading(t){ y -= 8; text(t, { size: 11, bold: true, color: navy, after: 2 }); }
+  function kv(label, value){
+    ensure(14);
+    page.drawText(label, { x: M, y, size: 9.5, font: bold, color: grey });
+    page.drawText(String(value || "—"), { x: M + 175, y, size: 10, font, color: black });
+    y -= 15;
+  }
+  function checkline(t){ text("[X]  " + t, { size: 9.5, after: 3 }); }
+
+  // Header
+  if (logo) {
+    const logoH = 36;                                  // height on the page, in points
+    const logoW = logoH * (logo.width / logo.height);  // keep aspect ratio
+    page.drawImage(logo, { x: M, y: y - logoH, width: logoW, height: logoH });
+    y -= logoH + 10;
+  } else {
+    page.drawText("Robot ZONE[01]", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
+    y -= 34;
+  }
+  text(T.title, { size: 15, bold: true, color: navy });
+  text(T.subtitle, { size: 12, color: ink, after: 2 });
+  page.drawLine({ start:{x:M,y}, end:{x:612-M,y}, thickness:1.2, color: navy });
+  y -= 14;
+
+  heading(T.s_info.replace(/^.*?— /, ""));
+  kv(T.f_first.replace(" *",""), d.firstname);
+  kv(T.f_last.replace(" *",""), d.lastname);
+  kv(T.f_type.replace(" *",""), T["opt_" + d.ptype] || d.ptype);
+  kv(T.f_gender.replace(" *",""), {F:T.opt_f, M:T.opt_m, X:T.opt_x, "-":T.opt_na}[d.gender] || d.gender);
+  kv(T.f_bday.replace(" *",""), d.birthday);
+  kv(T.f_school, d.school);
+  kv(T.f_econtact.replace(" *",""), d.econtact);
+  kv(T.f_ephone.replace(" *",""), d.ephone);
+  kv(T.f_medical, d.medical);
+  kv(T.f_additional, d.additional);
+  if (d.minor){ kv(T.g_name.replace(" *",""), d.gname); kv(T.g_rel.replace(" *",""), d.grel); }
+
+  heading(T.s_ack.replace(/^.*?— /, ""));
+  checkline(T.ack_docs);
+  checkline(T.ack_staff);
+
+  heading(T.s_media);
+  text((d.media === "yes" ? "[X] " + T.yes + "   [  ] " + T.no : "[  ] " + T.yes + "   [X] " + T.no) + " — " + T.media_text, { size: 9.5 });
+
+  heading(T.s_release.replace(/^.*?— /, ""));
+  T.release.forEach(p => text(p, { size: 9, after: 4 }));
+  checkline(T.ack_release.replace(" *",""));
+
+  heading(T.s_sign.replace(/^.*?— /, ""));
+  async function drawSig(labelKey, padName, signer){
+    ensure(80);
+    const cnv = pads[padName].canvas;
+    if (!cnv.width || !cnv.height) throw new Error("Signature pad is empty (" + padName + "). Please clear and sign again.");
+    const png = await pdf.embedPng(cnv.toDataURL("image/png"));
+    const h = 46, w = h * (png.width / png.height);
+    page.drawImage(png, { x: M, y: y - h, width: Math.min(w, 220), height: h });
+    page.drawLine({ start:{x:M, y:y-h-4}, end:{x:M+240, y:y-h-4}, thickness:0.7, color: black });
+    page.drawText(L[lang][labelKey].replace(/ \(.*\)/, "").replace(" *","") + " — " + signer, { x: M, y: y - h - 15, size: 8.5, font, color: grey });
+    y -= h + 30;
+  }
+  await drawSig("sig_p_label", "participant", d.firstname + " " + d.lastname);
+  if (d.minor) await drawSig("sig_g_label", "guardian", d.gname);
+
+  ensure(20);
+  const stamp = T.pdf_generated + " " + new Date().toLocaleString(lang === "fr" ? "fr-CA" : "en-CA");
+  page.drawText(stamp, { x: M, y, size: 8, font, color: grey });
+
+  // Machine-readable payload for registration-page parsing
+  pdf.setTitle("Consent & Release — " + d.firstname + " " + d.lastname);
+  const { accessCode, ...meta } = d;
+  pdf.setSubject("Z01CONSENT:" + JSON.stringify(meta));  pdf.setProducer(ORG + " online consent form");
+
+  const bytes = await pdf.save();
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (d.school + "_" + d.lastname + "_" + d.firstname).replace(/\s+/g, "_") + ".pdf";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+document.getElementById("btn-generate").addEventListener("click", async () => {
+  const errBox = document.getElementById("errors"), okBox = document.getElementById("success");
+  errBox.textContent = ""; okBox.textContent = "";
+  const d = collect();
+  const errs = validate(d);
+  if (errs.length){ errBox.textContent = errs.join("\n"); return; }
+  try {
+    await generatePDF(d);
+    okBox.textContent = L[lang].success;
+  } catch (e){
+    errBox.textContent = "PDF error: " + ((e && e.message) || String(e));
+    console.error(e);
+  }
+});
+
+setLang("en");
+</script>
+
+</body>
+</html>

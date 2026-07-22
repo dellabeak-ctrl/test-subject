@@ -631,11 +631,11 @@ async function generatePDF(d){
     }
     y -= opts.after || 0;
   }
-  function heading(t){ y -= 8; text(t, { size: 11, bold: true, color: black, after: 2 }); }
+  function heading(t){ y -= 8; text(t, { size: 11, bold: true, color: navy, after: 2 }); }
   function kv(label, value){
     ensure(14);
     page.drawText(label, { x: M, y, size: 9.5, font: bold, color: grey });
-    page.drawText(String(value || "—"), { x: M + 175, y, size: 10, font, color: black });
+    page.drawText(String(value || "—"), { x: M + 175, y, size: 10, font, color: navy });
     y -= 15;
   }
   function checkline(t){ text("[X]  " + t, { size: 9.5, after: 3 }); }

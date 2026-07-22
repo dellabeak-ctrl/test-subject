@@ -598,7 +598,7 @@ async function generatePDF(d){
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   let logo = null;
   try {
-    const logoBytes = await fetch("logo.png").then(r => { if (!r.ok) throw new Error("logo HTTP " + r.status); return r.arrayBuffer(); });
+    const logoBytes = await fetch("Zone01.png").then(r => { if (!r.ok) throw new Error("logo HTTP " + r.status); return r.arrayBuffer(); });
     logo = await pdf.embedPng(logoBytes);
   } catch (logoErr) { console.warn("Logo unavailable, using text header:", logoErr); }
   let brand = bold;

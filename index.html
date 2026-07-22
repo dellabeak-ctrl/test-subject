@@ -631,7 +631,7 @@ async function generatePDF(d){
     }
     y -= opts.after || 0;
   }
-  function heading(t){ y -= 8; text(t, { size: 11, bold: true, color: navy, after: 2 }); }
+  function heading(t){ y -= 8; text(t, { size: 11, bold: true, color: black, after: 2 }); }
   function kv(label, value){
     ensure(14);
     page.drawText(label, { x: M, y, size: 9.5, font: bold, color: grey });
@@ -645,12 +645,12 @@ async function generatePDF(d){
     const logoH = 36;                                  // height on the page, in points
     const logoW = logoH * (logo.width / logo.height);  // keep aspect ratio
     page.drawImage(logo, { x: M, y: y - logoH, width: logoW, height: logoH });
-    y -= logoH + 10;
+    y -= logoH + 24;
   } else {
     page.drawText("Robot ZONE[01]", { x: M, y, size: 28, font: brand, color: rgb(0.78,0.06,0.18) });
     y -= 34;
   }
-  text(T.title, { size: 15, bold: true, color: navy });
+  text(T.title, { size: 15, bold: true, color: black });
   text(T.subtitle, { size: 12, color: ink, after: 2 });
   page.drawLine({ start:{x:M,y}, end:{x:612-M,y}, thickness:1.2, color: navy });
   y -= 14;

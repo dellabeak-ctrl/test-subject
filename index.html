@@ -224,6 +224,18 @@
           <option value="-" data-i18n="opt_na"></option>
         </select>
       </div>
+       <div class="field"><label data-i18n="f_size"></label>
+        <select id="size">
+          <option value="" data-i18n="opt_select"></option>
+          <option value="jr" data-i18n="opt_j"></option>
+          <option value="s" data-i18n="opt_s"></option>
+          <option value="m" data-i18n="opt_m"></option>
+          <option value="L" data-i18n="opt_L"></option>
+          <option value="xl" data-i18n="opt_xl"></option>
+          <option value="xx" data-i18n="opt_xx"></option>
+          <option value="xxx" data-i18n="opt_xxx"></option>
+        </select>
+      </div>
       <div class="field"><label data-i18n="f_bday"></label><input type="date" id="birthday"></div>
       <div class="field"><label data-i18n="f_school"></label><input type="text" id="school"></div>
       <div class="field"><label data-i18n="f_econtact"></label><input type="text" id="econtact"></div>
@@ -336,8 +348,8 @@ en: {
   lockmsg: "Open all three documents above to unlock this checkbox.",
   s_info: "Step 2 — Participant information",
   f_first: "First name *", f_last: "Last name *", f_type: "Person type *",
-  f_gender: "Gender *", f_bday: "Date of birth *",
-  f_school: "School or club", f_econtact: "Emergency contact — name *",
+  f_gender: "Gender *", f_size: "T-Shirt Size", f_bday: "Date of birth *",
+  f_school: "School or club *", f_econtact: "Emergency contact — name *",
   f_ephone: "Emergency contact — phone *", f_medical: "Allergies or medical notes",
   f_additional: "Any additional information",
   opt_select: "--- Select ---", opt_participant: "Participant", opt_coach: "Coach",
@@ -397,7 +409,7 @@ fr: {
   lockmsg: "Ouvrez les trois documents ci-dessus pour déverrouiller cette case.",
   s_info: "Étape 2 — Renseignements sur le participant",
   f_first: "Prénom *", f_last: "Nom de famille *", f_type: "Type de personne *",
-  f_gender: "Genre *", f_bday: "Date de naissance *", 
+  f_gender: "Genre *", f_size: "Taille de t-shirt", f_bday: "Date de naissance *", 
   f_school: "École ou club", f_econtact: "Contact d'urgence — nom *",
   f_ephone: "Contact d'urgence — téléphone *", f_medical: "Allergies ou notes médicales",
   f_additional: "Toute information supplémentaire",
@@ -560,7 +572,7 @@ function val(id){ return document.getElementById(id).value.trim(); }
 function collect(){
   return {
     firstname: val("firstname"), lastname: val("lastname"),
-    ptype: val("ptype"), gender: val("gender"), birthday: val("birthday"),
+    ptype: val("ptype"), gender: val("gender"), size: val("size"), birthday: val("birthday"),
     school: val("school"),
     econtact: val("econtact"), ephone: val("ephone"), medical: val("medical"),
     additional: val("additional"),
@@ -660,6 +672,7 @@ async function generatePDF(d){
   kv(T.f_last.replace(" *",""), d.lastname);
   kv(T.f_type.replace(" *",""), T["opt_" + d.ptype] || d.ptype);
   kv(T.f_gender.replace(" *",""), {F:T.opt_f, M:T.opt_m, X:T.opt_x, "-":T.opt_na}[d.gender] || d.gender);
+  kv(T.f_size.replace(" *",""), {jr:T.opt_j, s:T.opt_s, m:T.opt_m, L:T.opt_L, xl:T.opt_xl, xx:T.opt_xx, xxx:T.opt_xxx}[d.size] || d.size);
   kv(T.f_bday.replace(" *",""), d.birthday);
   kv(T.f_school, d.school);
   kv(T.f_econtact.replace(" *",""), d.econtact);

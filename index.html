@@ -138,6 +138,14 @@
   }
   .sig-hint{font-size:12.5px;color:var(--label)}
 
+  .chart-hover{position:relative;cursor:help;color:var(--purple);font-weight:700;text-decoration:none}
+  .chart-hover img{
+    display:none;position:absolute;left:0;top:22px;z-index:10;
+    width:320px;max-width:80vw;border:1px solid var(--line);border-radius:8px;
+    background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.15);
+  }
+  .chart-hover:hover img{display:block}
+
   /* actions */
   .btn-main{
     border:0;border-radius:6px;padding:13px 26px;font:inherit;font-weight:800;font-size:15px;
@@ -224,7 +232,9 @@
           <option value="-" data-i18n="opt_na"></option>
         </select>
       </div>
-       <div class="field"><label data-i18n="f_size"></label>
+       <div class="field"><label data-i18n="f_size"></span>  <a href="size_guide.pdf" target="_blank" rel="noopener" class="chart-hover">&#9432;
+    <img src="size_guide.png" alt="Size Guide">
+  </a></label>
         <select id="size">
           <option value="" data-i18n="opt_select"></option>
           <option value="jr" data-i18n="opt_j"></option>

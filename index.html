@@ -229,7 +229,7 @@
           <option value="" data-i18n="opt_select"></option>
           <option value="jr" data-i18n="opt_j"></option>
           <option value="s" data-i18n="opt_s"></option>
-          <option value="m" data-i18n="opt_m"></option>
+          <option value="m" data-i18n="opt_mm"></option>
           <option value="L" data-i18n="opt_L"></option>
           <option value="xl" data-i18n="opt_xl"></option>
           <option value="xx" data-i18n="opt_xx"></option>
@@ -353,7 +353,7 @@ en: {
   f_ephone: "Emergency contact — phone *", f_medical: "Allergies or medical notes",
   f_additional: "Any additional information",
   opt_select: "--- Select ---", opt_participant: "Participant", opt_coach: "Coach",
-  opt_staff: "Staff / Volunteer", opt_f: "Female", opt_m: "Male", opt_x: "Other",
+  opt_staff: "Staff / Volunteer", opt_j: "Junior Large", opt_s: "Small", opt_mm: "Medium", opt_L: "Large", opt_xl: "X-Large", opt_xx: "2X-Large", opt_xxx: "3X-Large", opt_f: "Female", opt_m: "Male", opt_x: "Other",
   opt_na: "Prefer not to say",
   g_title: "Participant is under 18 — a parent or guardian must complete and sign this form.",
   g_name: "Parent/guardian full name *", g_rel: "Relationship to participant *",
@@ -414,7 +414,9 @@ fr: {
   f_ephone: "Contact d'urgence — téléphone *", f_medical: "Allergies ou notes médicales",
   f_additional: "Toute information supplémentaire",
   opt_select: "--- Sélectionner ---", opt_participant: "Participant(e)", opt_coach: "Entraîneur(e)",
-  opt_staff: "Personnel / Bénévole", opt_f: "Féminin", opt_m: "Masculin", opt_x: "Autre",
+  opt_staff: "Personnel / Bénévole", 
+  opt_j: "Junior Large", opt_s: "Petit", opt_mm: "Moyen", opt_L: "Grand", opt_xl: "T-Grand", opt_xx: "2T-Grand", opt_xxx: "3T-Grand",
+  opt_f: "Féminin", opt_m: "Masculin", opt_x: "Autre",
   opt_na: "Préfère ne pas répondre",
   g_title: "Le participant a moins de 18 ans — un parent ou tuteur doit remplir et signer ce formulaire.",
   g_name: "Nom complet du parent/tuteur *", g_rel: "Lien avec le participant *",
@@ -672,7 +674,7 @@ async function generatePDF(d){
   kv(T.f_last.replace(" *",""), d.lastname);
   kv(T.f_type.replace(" *",""), T["opt_" + d.ptype] || d.ptype);
   kv(T.f_gender.replace(" *",""), {F:T.opt_f, M:T.opt_m, X:T.opt_x, "-":T.opt_na}[d.gender] || d.gender);
-  kv(T.f_size.replace(" *",""), {jr:T.opt_j, s:T.opt_s, m:T.opt_m, L:T.opt_L, xl:T.opt_xl, xx:T.opt_xx, xxx:T.opt_xxx}[d.size] || d.size);
+  kv(T.f_size.replace(" *",""), {jr:T.opt_j, s:T.opt_s, m:T.opt_mm, L:T.opt_L, xl:T.opt_xl, xx:T.opt_xx, xxx:T.opt_xxx}[d.size] || d.size);
   kv(T.f_bday.replace(" *",""), d.birthday);
   kv(T.f_school, d.school);
   kv(T.f_econtact.replace(" *",""), d.econtact);

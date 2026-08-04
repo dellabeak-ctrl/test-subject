@@ -400,6 +400,7 @@ en: {
   err_sig_p: "Draw the participant signature.",
   err_sig_g: "Draw the parent/guardian signature.",
   err_release: "Confirm the release of liability checkbox.",
+  err_bday: "Enter a valid date of birth (within the last 100 years).",
   success: "Done! Your consent information has been shared with the Zone01 team. A PDF copy is available for download.",
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
@@ -463,6 +464,7 @@ fr: {
   err_sig_p: "Dessinez la signature du participant.",
   err_sig_g: "Dessinez la signature du parent/tuteur.",
   err_release: "Confirmez la case de décharge de responsabilité.",
+  err_bday: "Entrez une date de naissance valide (au cours des 100 dernières années).",
   success: "Terminé ! Les renseignements relatifs à votre consentement ont été transmis à l’équipe de Zone01. Une copie en format PDF est disponible en téléchargement.",
   pdf_generated: "Généré en ligne le", pdf_media_yes: "OUI", pdf_media_no: "NON",
 }};
@@ -579,6 +581,16 @@ function clearSig(name){
 initPad("participant");
 initPad("guardian");
 
+(function(){
+  const b = document.getElementById("birthday");
+  const t = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const iso = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+  b.max = iso(t);                                   // no future dates
+  const min = new Date(t); min.setFullYear(t.getFullYear() - 100);
+  b.min = iso(min);                                 // no more than 100 years back
+})();
+
 /* ================= VALIDATION + PDF ================= */
 function val(id){ return document.getElementById(id).value.trim(); }
 
@@ -607,6 +619,10 @@ function validate(d){
   if (!/^[A-Za-z0-9]{8}$/.test(d.accessCode)) errs.push(T.err_acode);
   if (d.minor) req.push(d.gname, d.grel);
   if (req.some(v => !v)) errs.push(T.err_required);
+  if (d.birthday){
+  const age = ageOn(d.birthday);
+  if (age === null || age < 0 || age > 100) errs.push(T.err_bday);
+}
   if (!d.ackStaff) errs.push(T.err_ack);
   if (!d.media) errs.push(T.err_media);
   if (!d.ackRelease) errs.push(T.err_release);

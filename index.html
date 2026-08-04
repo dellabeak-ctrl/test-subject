@@ -401,7 +401,7 @@ en: {
   err_sig_g: "Draw the parent/guardian signature.",
   err_release: "Confirm the release of liability checkbox.",
   err_bday: "Enter a valid date of birth (within the last 100 years).",
-  err_name: "Names may only contain letters, hyphens, underscores, and apostrophes.",
+  err_name: "Names may only contain letters, hyphens, periods, and apostrophes.",
   success: "Done! Your consent information has been shared with the Zone01 team. A PDF copy is available for download.",
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
@@ -466,7 +466,7 @@ fr: {
   err_sig_g: "Dessinez la signature du parent/tuteur.",
   err_release: "Confirmez la case de décharge de responsabilité.",
   err_bday: "Entrez une date de naissance valide (au cours des 100 dernières années).",
-  err_name: "Les noms ne peuvent contenir que des lettres, des traits d'union, des tirets bas et des apostrophes.",
+  err_name: "Les noms ne peuvent contenir que des lettres, des traits d'union, des points et des apostrophes.",
   success: "Terminé ! Les renseignements relatifs à votre consentement ont été transmis à l’équipe de Zone01. Une copie en format PDF est disponible en téléchargement.",
   pdf_generated: "Généré en ligne le", pdf_media_yes: "OUI", pdf_media_no: "NON",
 }};
@@ -625,7 +625,7 @@ function validate(d){
   const age = ageOn(d.birthday);
   if (age === null || age < 0 || age > 100) errs.push(T.err_bday);
 }
-  const nameOk = v => /^[\p{L}\-_'’]+$/u.test(v);
+  const nameOk = v => /^[\p{L}\-.'’]+$/u.test(v);
   if (d.firstname && !nameOk(d.firstname)) errs.push(T.err_name);
   if (d.lastname && !nameOk(d.lastname)) errs.push(T.err_name);
   if (!d.ackStaff) errs.push(T.err_ack);

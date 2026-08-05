@@ -613,6 +613,43 @@ function collect(){
   };
 }
 
+  function buildPayload(d){
+  const participantSigned = pads.participant.strokes > 0;
+  const guardianSigned = d.minor ? pads.guardian.strokes > 0 : false;
+  const parentalApproval = !d.minor || (guardianSigned && !!d.gname && !!d.grel);
+  const documentsRead = docRead.every(Boolean);
+  return {
+    version: "Z01CONSENT-v2",
+    participant: {
+      firstname: d.firstname, lastname: d.lastname, ptype: d.ptype,
+      gender: d.gender, birthday: d.birthday, school: d.school, size: d.size
+    },
+    consent: {
+      approved: documentsRead && d.ackDocs && d.ackStaff && d.ackRelease
+                && participantSigned && (!d.minor || guardianSigned),
+      parentalApproval: parentalApproval,
+      documentsRead: documentsRead,
+      acknowledgedDocs: d.ackDocs,
+      acknowledgedStaff: d.ackStaff,
+      acknowledgedRelease: d.ackRelease,
+      participantSigned: participantSigned,
+      minor: d.minor,
+      guardianSigned: guardianSigned,
+      guardian: d.minor ? { name: d.gname, relationship: d.grel } : null,
+      mediaConsent: d.media === "yes",
+      accessCode: d.accessCode,
+      lang: d.lang,
+      generated: d.generated
+    },
+    registrantInfo: {
+      emergencyContact: d.econtact,
+      emergencyPhone: d.ephone,
+      medical: d.medical,
+      additional: d.additional
+    }
+  };
+}
+
 function validate(d){
   const errs = [];
   const T = L[lang];
@@ -746,9 +783,11 @@ async function generatePDF(d){
   page.drawText(stamp, { x: M, y, size: 8, font, color: grey });
 
   // Machine-readable payload for registration-page parsing
-  pdf.setTitle("Consent & Release — " + d.firstname + " " + d.lastname);
-  const { accessCode, ...meta } = d;
-  pdf.setSubject("Z01CONSENT:" + JSON.stringify(meta));  pdf.setProducer(ORG + " online consent form");
+  pdf.setTitle("Consent & Release — " + d.firstname + " " + d.lastname); 
+  const p = buildPayload(d);
+  delete p.consent.accessCode;   // the code stays out of the PDF, as before
+  pdf.setSubject("Z01CONSENT-v2:" + JSON.stringify(p));
+  pdf.setProducer(ORG + " online consent form");
 
   const bytes = await pdf.save();
   const blob = new Blob([bytes], { type: "application/pdf" });

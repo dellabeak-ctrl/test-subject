@@ -402,6 +402,8 @@ en: {
   err_release: "Confirm the release of liability checkbox.",
   err_bday: "Enter a valid date of birth (within the last 100 years).",
   err_name: "Names may only contain letters, hyphens, periods, and apostrophes.",
+  err_length: "One or more fields are too long. Please shorten them.",
+  err_phone: "Enter a valid phone number (10–15 digits).",
   success: "Done! Your consent information has been shared with the Zone01 team. A PDF copy is available for download.",
   pdf_generated: "Generated online on", pdf_media_yes: "YES", pdf_media_no: "NO",
 },
@@ -467,6 +469,8 @@ fr: {
   err_release: "Confirmez la case de décharge de responsabilité.",
   err_bday: "Entrez une date de naissance valide (au cours des 100 dernières années).",
   err_name: "Les noms ne peuvent contenir que des lettres, des traits d'union, des points et des apostrophes.",
+  err_length: "Un ou plusieurs champs sont trop longs. Veuillez les raccourcir.",
+  err_phone: "Entrez un numéro de téléphone valide (10 à 15 chiffres).",
   success: "Terminé ! Les renseignements relatifs à votre consentement ont été transmis à l’équipe de Zone01. Une copie en format PDF est disponible en téléchargement.",
   pdf_generated: "Généré en ligne le", pdf_media_yes: "OUI", pdf_media_no: "NON",
 }};
@@ -596,12 +600,19 @@ initPad("guardian");
 /* ================= VALIDATION + PDF ================= */
 function val(id){ return document.getElementById(id).value.trim(); }
 
+  // Default: keep digits only (with optional leading +), validate length in validate().
+// If wanting a display format like (514) 765-4353, change this one function.
+function normalizePhone(raw){
+  const plus = raw.trim().startsWith("+") ? "+" : "";
+  return plus + raw.replace(/\D/g, "");
+}
+
 function collect(){
   return {
     firstname: val("firstname"), lastname: val("lastname"),
     ptype: val("ptype"), gender: val("gender"), size: val("size"), birthday: val("birthday"),
     school: val("school"),
-    econtact: val("econtact"), ephone: val("ephone"), medical: val("medical"),
+    econtact: val("econtact"), ephone: normalizePhone(val("ephone")), medical: val("medical"),
     additional: val("additional"),
     minor: isMinor(), gname: val("gname"), grel: val("grel"),
     media: (document.querySelector("input[name=media]:checked") || {}).value || "",
@@ -613,13 +624,15 @@ function collect(){
   };
 }
 
-  function buildPayload(d){
+ function buildPayload(d){
   const participantSigned = pads.participant.strokes > 0;
   const guardianSigned = d.minor ? pads.guardian.strokes > 0 : false;
   const parentalApproval = !d.minor || (guardianSigned && !!d.gname && !!d.grel);
   const documentsRead = docRead.every(Boolean);
   return {
-    version: "Z01CONSENT-v2",
+    version: "v1",
+    lang: d.lang,
+    generated: d.generated,
     participant: {
       firstname: d.firstname, lastname: d.lastname, ptype: d.ptype,
       gender: d.gender, birthday: d.birthday, school: d.school, size: d.size
@@ -637,9 +650,7 @@ function collect(){
       guardianSigned: guardianSigned,
       guardian: d.minor ? { name: d.gname, relationship: d.grel } : null,
       mediaConsent: d.media === "yes",
-      accessCode: d.accessCode,
-      lang: d.lang,
-      generated: d.generated
+      accessCode: d.accessCode
     },
     registrantInfo: {
       emergencyContact: d.econtact,
@@ -665,6 +676,14 @@ function validate(d){
   const nameOk = v => /^[\p{L}\-.'’]+$/u.test(v);
   if (d.firstname && !nameOk(d.firstname)) errs.push(T.err_name);
   if (d.lastname && !nameOk(d.lastname)) errs.push(T.err_name);
+    // --- length caps (DEFAULTS — coworker to confirm against DB columns) ---
+  const cap = { firstname:45, lastname:45, school:100, econtact:100,
+                ephone:20, medical:500, additional:500, gname:90, grel:45 };
+  for (const [f, max] of Object.entries(cap)){
+    if (d[f] && d[f].length > max){ errs.push(T.err_length); break; }
+  }
+  if (d.ephone && !/^\+?\d{10,15}$/.test(d.ephone)) errs.push(T.err_phone);
+  if (d.birthday && !/^\d{4}-\d{2}-\d{2}$/.test(d.birthday)) errs.push(T.err_bday);
   if (!d.ackStaff) errs.push(T.err_ack);
   if (!d.media) errs.push(T.err_media);
   if (!d.ackRelease) errs.push(T.err_release);
@@ -786,7 +805,7 @@ async function generatePDF(d){
   pdf.setTitle("Consent & Release — " + d.firstname + " " + d.lastname); 
   const p = buildPayload(d);
   delete p.consent.accessCode;   // the code stays out of the PDF, as before
-  pdf.setSubject("Z01CONSENT-v2:" + JSON.stringify(p));
+  pdf.setSubject("Z01CONSENT:" + JSON.stringify(p));
   pdf.setProducer(ORG + " online consent form");
 
   const bytes = await pdf.save();
